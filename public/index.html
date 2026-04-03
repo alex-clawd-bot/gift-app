@@ -24,6 +24,15 @@
             <li>所有人收到的都是同一本書</li>
             <li>送出後可再次查詢狀態</li>
           </ul>
+
+          <div class="ca-card">
+            <div class="ca-header">
+              <span class="ca-label">CA</span>
+              <button id="copy-ca-button" class="ghost-button small" type="button">複製</button>
+            </div>
+            <p id="ca-address" class="ca-address">0x9f465f7ad7bb42665e22d55bad322f4726a6ffff</p>
+            <p id="ca-feedback" class="ca-feedback">點一下就能複製合約地址。</p>
+          </div>
         </div>
         <div class="book-card">
           <img src="/assets/book-cover.jpg" alt="《幹安人生》書封" class="book-cover" />
@@ -39,11 +48,41 @@
         <section class="panel stats-panel">
           <div class="panel-heading">
             <div>
-              <p class="section-label">Live Stats</p>
-              <h2>目前送書進度</h2>
+              <p class="section-label">Treasury + Stats</p>
+              <h2>金庫與送書進度</h2>
             </div>
-            <button id="refresh-stats-button" class="ghost-button" type="button">重新整理</button>
+            <div class="button-row">
+              <button id="refresh-treasury-button" class="ghost-button" type="button">更新金庫</button>
+              <button id="refresh-stats-button" class="ghost-button" type="button">重新整理</button>
+            </div>
           </div>
+
+          <section class="treasury-card">
+            <div class="treasury-header">
+              <div>
+                <p class="section-label">BSC Treasury</p>
+                <h3>金庫資產</h3>
+              </div>
+            </div>
+
+            <div class="treasury-address-wrap">
+              <span class="treasury-address-label">金庫地址</span>
+              <p id="treasury-address" class="treasury-address">0xa348396A85180926958a1B30c39dD1ad63889A30</p>
+            </div>
+
+            <div class="treasury-grid">
+              <article class="treasury-tile">
+                <span class="stat-label">現在有多少 BNB</span>
+                <strong class="stat-value treasury-value" id="treasury-bnb">--</strong>
+                <span class="treasury-subvalue" id="treasury-usd">估值載入中</span>
+              </article>
+              <article class="treasury-tile accent">
+                <span class="stat-label">可以送多少本書</span>
+                <strong class="stat-value treasury-value" id="treasury-books">--</strong>
+                <span class="treasury-subvalue">以每本 US$9.9 計算</span>
+              </article>
+            </div>
+          </section>
 
           <div class="stats-grid">
             <article class="stat-tile">

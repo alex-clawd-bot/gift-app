@@ -92,6 +92,49 @@ input {
   line-height: 1.8;
 }
 
+.ca-card {
+  margin-top: 24px;
+  padding: 18px;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(255, 245, 223, 0.88), rgba(247, 236, 211, 0.98));
+  border: 1px solid rgba(183, 137, 44, 0.18);
+}
+
+.ca-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.ca-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  font-weight: 700;
+}
+
+.ca-address {
+  margin: 12px 0 8px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  word-break: break-all;
+  color: var(--text);
+}
+
+.ca-feedback {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.ghost-button.small {
+  padding: 8px 12px;
+  font-size: 0.88rem;
+}
+
 .book-card {
   background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(240, 230, 209, 0.9));
   border: 1px solid rgba(183, 137, 44, 0.18);
@@ -386,4 +429,73 @@ input {
   .action-row {
     flex-direction: column;
   }
+}
+.button-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.treasury-card {
+  margin-top: 24px;
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 20px;
+  background: linear-gradient(180deg, #fff7e8, #f5ead3);
+}
+
+.treasury-header h3 {
+  margin: 10px 0 0;
+  font-size: 1.35rem;
+}
+
+.treasury-address-wrap {
+  margin-top: 16px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.66);
+}
+
+.treasury-address-label {
+  display: block;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.treasury-address {
+  margin: 8px 0 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  word-break: break-all;
+}
+
+.treasury-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.treasury-tile {
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(63, 45, 25, 0.08);
+  border-radius: 22px;
+  padding: 18px;
+}
+
+.treasury-tile.accent {
+  background: linear-gradient(180deg, #fff0c8, #f3d98f);
+}
+
+.treasury-value {
+  margin-top: 10px;
+}
+
+.treasury-subvalue {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.5;
 }
