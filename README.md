@@ -21,6 +21,8 @@ npm install
 npm start
 ```
 
+建議使用 `Node.js 20+`。
+
 預設使用 `Supabase` 當資料儲存層，schema 在 `supabase/schema.sql`。
 完整設定流程在 `docs/supabase-setup.md`。
 Railway 部署說明在 `docs/railway-deploy.md`。
