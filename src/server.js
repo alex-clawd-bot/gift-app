@@ -19,12 +19,19 @@ const contentTypes = {
 };
 
 export function createServer({ config, store, amazonProvider, bitrefillClient }) {
+  const adminRoutePath = `/${config.adminRouteSlug}`;
+  const adminApiBase = `/api/admin/${config.adminRouteSlug}`;
+
   return http.createServer(async (request, response) => {
     try {
       const url = new URL(request.url, `http://${request.headers.host ?? 'localhost'}`);
 
       if (isReadMethod(request.method) && (url.pathname === '/' || url.pathname === '/index.html')) {
         return serveStaticFile(response, 'index.html', request.method);
+      }
+
+      if (isReadMethod(request.method) && url.pathname === adminRoutePath) {
+        return serveStaticFile(response, 'admin.html', request.method);
       }
 
       if (isReadMethod(request.method) && !url.pathname.startsWith('/api/') && url.pathname !== '/health') {
@@ -48,6 +55,25 @@ export function createServer({ config, store, amazonProvider, bitrefillClient })
 
       if (request.method === 'GET' && url.pathname === '/api/stats') {
         return sendJson(response, 200, {
+          stats: await store.getEmailStats()
+        });
+      }
+
+      if (request.method === 'GET' && url.pathname === `${adminApiBase}/emails`) {
+        return sendJson(response, 200, {
+          emails: await store.listEmails(),
+          stats: await store.getEmailStats()
+        });
+      }
+
+      if (request.method === 'PATCH' && url.pathname.startsWith(`${adminApiBase}/emails/`)) {
+        const email = normalizeEmail(decodeURIComponent(url.pathname.replace(`${adminApiBase}/emails/`, '')));
+        const body = await readJson(request);
+        const status = String(body.status ?? '').trim();
+        const record = await store.updateEmailAdminStatus(email, status);
+
+        return sendJson(response, 200, {
+          email: record,
           stats: await store.getEmailStats()
         });
       }

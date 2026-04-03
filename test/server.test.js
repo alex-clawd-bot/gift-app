@@ -10,7 +10,8 @@ async function createTestApp() {
   const server = createServer({
     config: {
       ebookAsin: 'B0BOOK123',
-      ebookTitle: 'Same Ebook'
+      ebookTitle: 'Same Ebook',
+      adminRouteSlug: 'hidden-admin'
     },
     store,
     amazonProvider: {
@@ -69,6 +70,50 @@ async function createTestApp() {
     }
   };
 }
+
+
+test('hidden admin route serves admin page', async () => {
+  const app = await createTestApp();
+
+  try {
+    const response = await fetch(`${app.baseUrl}/hidden-admin`);
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    assert.match(html, /email 管理後台/);
+  } finally {
+    await app.close();
+  }
+});
+
+test('admin can list emails and update status', async () => {
+  const app = await createTestApp();
+
+  try {
+    await fetch(`${app.baseUrl}/api/emails`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ email: 'admin-test@example.com' })
+    });
+
+    let response = await fetch(`${app.baseUrl}/api/admin/hidden-admin/emails`);
+    assert.equal(response.status, 200);
+    let payload = await response.json();
+    assert.equal(payload.emails[0].email, 'admin-test@example.com');
+    assert.equal(payload.emails[0].status, 'pending');
+
+    response = await fetch(`${app.baseUrl}/api/admin/hidden-admin/emails/admin-test%40example.com`, {
+      method: 'PATCH',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ status: 'ordered' })
+    });
+    assert.equal(response.status, 200);
+    payload = await response.json();
+    assert.equal(payload.email.status, 'ordered');
+    assert.equal(payload.stats.sentEmails, 1);
+  } finally {
+    await app.close();
+  }
+});
 
 test('homepage serves the giveaway UI', async () => {
   const app = await createTestApp();

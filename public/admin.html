@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Email Panel</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <div class="page-shell admin-shell">
+      <header class="panel admin-hero">
+        <p class="section-label">Hidden Admin</p>
+        <h1>email 管理後台</h1>
+        <p class="hero-text">這是 demo 用的隱藏頁面。可查看目前 email 名單，並手動調整狀態。</p>
+      </header>
+
+      <main class="admin-grid">
+        <section class="panel admin-summary">
+          <div class="panel-heading compact">
+            <div>
+              <p class="section-label">Summary</p>
+              <h2>目前統計</h2>
+            </div>
+            <button id="admin-refresh-button" class="ghost-button" type="button">重新整理</button>
+          </div>
+
+          <div class="stats-grid admin-stats-grid">
+            <article class="stat-tile">
+              <span class="stat-label">已登記</span>
+              <strong class="stat-value" id="admin-registered-count">0</strong>
+            </article>
+            <article class="stat-tile accent">
+              <span class="stat-label">已送出</span>
+              <strong class="stat-value" id="admin-sent-count">0</strong>
+            </article>
+            <article class="stat-tile">
+              <span class="stat-label">待送出</span>
+              <strong class="stat-value" id="admin-pending-count">0</strong>
+            </article>
+            <article class="stat-tile">
+              <span class="stat-label">處理中</span>
+              <strong class="stat-value" id="admin-processing-count">0</strong>
+            </article>
+          </div>
+        </section>
+
+        <section class="panel admin-table-panel">
+          <div class="panel-heading compact">
+            <div>
+              <p class="section-label">Email Records</p>
+              <h2>email 名單</h2>
+            </div>
+          </div>
+
+          <div id="admin-feedback" class="feedback-banner hidden" role="status" aria-live="polite"></div>
+
+          <div class="admin-table-wrap">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Email</th>
+                  <th>建立時間</th>
+                  <th>目前狀態</th>
+                  <th>更新狀態</th>
+                </tr>
+              </thead>
+              <tbody id="admin-email-tbody">
+                <tr>
+                  <td colspan="4" class="admin-empty">載入中...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script type="module" src="/admin.js"></script>
+  </body>
+</html>

@@ -86,6 +86,7 @@ Railway 部署說明在 `docs/railway-deploy.md`。
 
 ### Storage
 
+- `ADMIN_ROUTE_SLUG`: 隱藏 admin 頁面與 admin API 的 secret slug（demo 用）
 - `STORE_PROVIDER`: `supabase` 或 `memory`，預設 `supabase`
 - `SUPABASE_URL`: Supabase project URL
 - `SUPABASE_SERVICE_ROLE_KEY`: 後端用 service role key

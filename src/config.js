@@ -8,6 +8,7 @@ export function loadConfig() {
 
   return {
     port: parseInteger(process.env.PORT, 3000),
+    adminRouteSlug: process.env.ADMIN_ROUTE_SLUG ?? '__gift_admin_9f7c4a__',
     storeProvider: process.env.STORE_PROVIDER ?? 'supabase',
     supabaseUrl: process.env.SUPABASE_URL ?? '',
     supabaseServiceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY ?? '',

@@ -31,6 +31,10 @@ export class MemoryStore {
     return record ? clone(record) : null;
   }
 
+  async listEmails() {
+    return clone([...this.state.emails].sort((left, right) => right.createdAt.localeCompare(left.createdAt)));
+  }
+
   async getEmailStatus(email) {
     const normalizedEmail = normalizeEmail(email);
     const emailRecord = this.state.emails.find((item) => item.email === normalizedEmail) ?? null;
@@ -100,6 +104,24 @@ export class MemoryStore {
 
     this.state.emails.push(record);
     return { email: clone(record), created: true };
+  }
+
+  async updateEmailAdminStatus(email, status) {
+    assertValidAdminStatus(status);
+    const normalizedEmail = normalizeEmail(email);
+    const record = this.state.emails.find((item) => item.email === normalizedEmail);
+
+    if (!record) {
+      const error = new Error('EMAIL_NOT_FOUND');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    const now = new Date().toISOString();
+    record.status = status;
+    record.updatedAt = now;
+    record.orderedAt = status === 'ordered' ? (record.orderedAt ?? now) : null;
+    return clone(record);
   }
 
   async reserveRechargeCard(code) {
@@ -255,6 +277,19 @@ export class SupabaseStore {
     return data ? mapEmailRow(data) : null;
   }
 
+  async listEmails() {
+    const { data, error } = await this.client
+      .from(this.tables.emails)
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      throw error;
+    }
+
+    return (data ?? []).map(mapEmailRow);
+  }
+
   async getEmailStatus(email) {
     const normalizedEmail = normalizeEmail(email);
     const [emailRecord, order] = await Promise.all([
@@ -363,6 +398,36 @@ export class SupabaseStore {
     }
 
     throw error;
+  }
+
+  async updateEmailAdminStatus(email, status) {
+    assertValidAdminStatus(status);
+    const normalizedEmail = normalizeEmail(email);
+    const now = new Date().toISOString();
+    const orderedAt = status === 'ordered' ? now : null;
+
+    const { data, error } = await this.client
+      .from(this.tables.emails)
+      .update({
+        status,
+        updated_at: now,
+        ordered_at: orderedAt
+      })
+      .eq('email', normalizedEmail)
+      .select('*')
+      .maybeSingle();
+
+    if (error) {
+      throw error;
+    }
+
+    if (!data) {
+      const notFoundError = new Error('EMAIL_NOT_FOUND');
+      notFoundError.statusCode = 404;
+      throw notFoundError;
+    }
+
+    return mapEmailRow(data);
   }
 
   async reserveRechargeCard(code) {
@@ -620,6 +685,15 @@ function mapBitrefillPurchaseRow(row) {
     redemptionCodes: row.redemption_codes,
     createdAt: row.created_at
   };
+}
+
+
+function assertValidAdminStatus(status) {
+  if (!['pending', 'processing', 'ordered'].includes(status)) {
+    const error = new Error('Invalid email status.');
+    error.statusCode = 400;
+    throw error;
+  }
 }
 
 function isUniqueViolation(error) {
